@@ -1,0 +1,355 @@
+
+
+
+ const [visibilityState, setVisibilityState] = useState({});
+
+    let arrData = [
+        {
+            name: "test1",
+            age: 21,
+            gender: "male",
+            email: "test@gmail.com",
+            total: 0,
+            subRow: [
+                {
+                    name: "test1 (98329)",
+                    age: 21,
+                    gender: "male",
+                    email: "test@gmail.com",
+                    total: 0,
+                    subRow: [
+                        {
+                            name: "test1",
+                            age: 21,
+                            gender: "male",
+                            email: "test@gmail.com",
+                            total: 1,
+                            subRow: [],
+                        },
+                        {
+                            name: "test1",
+                            age: 21,
+                            gender: "male",
+                            email: "test@gmail.com",
+                            total: 3,
+                            subRow: [],
+                        },
+                    ],
+                }]
+        },
+
+        {
+            name: "test1 (12344)",
+            age: 21,
+            gender: "male",
+            email: "test@gmail.com",
+            total: 0,
+            subRow: [
+                {
+                    name: "test1",
+                    age: 21,
+                    gender: "male",
+                    email: "test@gmail.com",
+                    total: 1,
+                    subRow: [],
+                },
+            ],
+        },
+        {
+            name: "test1 (98329)",
+            age: 21,
+            gender: "male",
+            email: "test@gmail.com",
+            total: 0,
+            subRow: [
+                {
+                    name: "test1",
+                    age: 21,
+                    gender: "male",
+                    email: "test@gmail.com",
+                    total: 1,
+                    subRow: [],
+                },
+                {
+                    name: "test1",
+                    age: 21,
+                    gender: "male",
+                    email: "test@gmail.com",
+                    total: 3,
+                    subRow: [],
+                },
+            ]
+        }
+    ];
+
+
+    let finalArr = [];
+
+    function handleSeris(){
+        for(let i=0;i<arrData.length;i++){
+            let obj = arrData[i];
+            obj.groupNumber = i+1;
+            if(obj.subRow.length > 0){
+                for(let j = 0;j<obj.subRow.length;j++){
+                    let obj1 = obj.subRow[j];
+                    obj1.groupNumber =  Number(String(i+1) + String(j+1));
+                    if(obj1.subRow.length > 0 ){
+                        for(let k = 0;k<obj1.subRow.length;k++){
+                            let obj2 = obj1.subRow[k];
+                            obj2.groupNumber =  Number(String(i+1) + String(j+1) + String(k+1));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    console.log(arrData);
+
+    handleSeris();
+
+    const [data, setData] = useState([arrData]);
+
+
+    const handleRowVisibility = (GroupCode) => {
+        const rowsToToggle = document.querySelectorAll(
+          `tr[data-GroupCode="${GroupCode}"]:not(.group-visible)`
+        );
+    
+        //console.log(rowsToToggle);
+        setVisibilityState((prevState) => ({
+          ...prevState,
+          [GroupCode]: !prevState[GroupCode],
+        }));
+    
+        rowsToToggle.forEach((toggleRow) => {
+          toggleRow.style.display = visibilityState[GroupCode]
+            ? "none"
+            : "table-row";
+        });
+      };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div>
+             <>
+                    {data &&
+                      data.map((elm, index) => {
+                        const idName =
+                          elm.PortfolioCode === 0 ? "distinctColor" : "";
+                        const isGroupVisible =
+                          elm.groupCode == null || elm.PortfolioCode === 0;
+                        const groupClass = isGroupVisible
+                          ? "group-visible"
+                          : "group-hidden";
+                        if (isGroupVisible) {
+                          return (
+                            <tr
+                              id={idName}
+                              className={groupClass}
+                              data-GroupCode={elm.groupCode}
+                              onClick={() => {
+                                handleRowVisibility(elm.groupCode);
+                              }}
+                            >
+                              <td> {elm.Analyst} </td>
+                              <td> {elm.Marketopper} </td>
+                              <td> {elm.EnoraGlobal} </td>
+                              <td> {elm.Aprajita} </td>
+                              <td> {elm.IntuitiveAlpha} </td>
+                            </tr>
+                          );
+                        } else {
+                          return (
+                            <tr
+                              className={groupClass}
+                              data-GroupCode={elm.groupCode}
+                              onClick={() => handleRowVisibility(elm.groupCode)}
+                            >
+                              <td> {elm.PortfolioCode} </td>
+                              <td> {elm.Marketopper} </td>
+                              <td> {elm.EnoraGlobal} </td>
+                              <td> {elm.Aprajita} </td> 
+                              <td> {elm.IntuitiveAlpha} </td>
+                            </tr>
+                          );
+                        }
+                      })}
+                  </>
+        </div>
+
+
+
+
+
+
+
+
+
+
+===================================================================================================================
+import React, { useState } from "react";
+import "./Option.css";
+import { MultiSelect } from "primereact/multiselect";
+import { Dropdown } from "primereact/dropdown";
+import Show from "./Show";
+
+function Option() {
+  const [selectedAnalyst, setSelectedAnalyst] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState("");
+
+  const Analyst = [
+    { name: "Arun", code: "ARUN" },
+    { name: "Shalu", code: "SHALU" },
+    { name: "Shipli", code: "SHILPI" },
+    { name: "Shruti", code: "SHRUTI" },
+    { name: "Chinmay", code: "CHINMAY" },
+  ];
+
+  const Product = [
+    { name: "BN_SF", code: "BN_SF" },
+    { name: "BN_W", code: "BN_W" },
+    { name: "NI_SF", code: "NI_SF" },
+    { name: "NI_W", code: "NI_W" },
+  ];
+
+  const Group = [
+    { name: "Portfolio", code: "PORTFOLIO" },
+    { name: "Product", code: "PRODUCT" },
+  ];
+
+  const handleSelection = (setterFunction) => (e) => {
+    setterFunction(e.value);
+
+    allDataholder();
+  };
+  function allDataholder() {
+    console.log("========================");
+    if (selectedAnalyst) {
+      selectedAnalyst.map((elm) => {
+        console.log(elm);
+      });
+    }
+    if (selectedProduct) {
+      selectedProduct.map((elm) => {
+        console.log(elm);
+      });
+    }
+    if (selectedGroup) {
+      console.log(selectedGroup.name);
+    }
+  }
+  return (
+    <>
+      <div className="select_holder">
+        <div className="card flex justify-content-center">
+          <MultiSelect
+            value={selectedAnalyst}
+            onChange={handleSelection(setSelectedAnalyst)}
+            options={Analyst}
+            optionLabel="name"
+            filter
+            placeholder="Select Analyst ... "
+            maxSelectedLabels={3}
+            className="w-full md:w-20rem"
+          />
+        </div>
+
+        <div className="card flex justify-content-center">
+          <MultiSelect
+            value={selectedProduct}
+            onChange={handleSelection(setSelectedProduct)}
+            options={Product}
+            optionLabel="name"
+            filter
+            placeholder="Select Product ... "
+            maxSelectedLabels={3}
+            className="w-full md:w-20rem"
+          />
+        </div>
+
+        <div className="card flex justify-content-center">
+          <Dropdown
+            value={selectedGroup}
+            onChange={handleSelection(setSelectedGroup)}
+            options={Group}
+            optionLabel="name"
+            showClear
+            placeholder="Select a Group ... "
+            className="w-full md:w-14rem"
+          />
+        </div>
+      </div>
+
+      <>
+        <Show
+          selectedAnalyst={selectedAnalyst}
+          selectedGroup={selectedGroup}
+          selectedProduct={selectedProduct}
+        />
+      </>
+    </>
+  );
+}
+
+export default Option;
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+import React from "react";
+
+function Show({ selectedAnalyst, selectedProduct, selectedGroup }) {
+  // function call for update the product data and portfolio data
+
+  // there is two array for
+  // first one for portfolio
+  // second for product
+
+  return (
+    <div>
+      <p>
+        {selectedProduct &&
+          selectedProduct.map((el) => {
+            return <li> {el.name}</li>;
+          })}
+      </p>
+      <h4>
+        {selectedAnalyst &&
+          selectedAnalyst.map((el) => {
+            return <li> {el.name}</li>;
+          })}
+      </h4>
+
+      <p>{selectedGroup && selectedGroup.name}</p>
+    </div>
+  );
+}
+
+export default Show;
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
